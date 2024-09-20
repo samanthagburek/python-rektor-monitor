@@ -1,5 +1,6 @@
 import hashlib
 import binascii
+import base64
 
 # domain separation prefixes according to the RFC
 RFC6962_LEAF_HASH_PREFIX = 0
@@ -145,3 +146,17 @@ def verify_inclusion(hasher, index, size, leaf_hash, proof, root, debug=False):
     if debug:
         print("Calculated root hash", calc_root.hex())
         print("Given root hash", bytearray_root.hex())
+
+def compute_leaf_hash(body):
+    entry_bytes = base64.b64decode(body)
+
+    # create a new sha256 hash object
+    h = hashlib.sha256()
+    # write the leaf hash prefix
+    h.update(bytes([RFC6962_LEAF_HASH_PREFIX]))
+
+    # write the actual leaf data
+    h.update(entry_bytes)
+
+    # return the computed hash
+    return h.hexdigest()

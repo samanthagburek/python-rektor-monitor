@@ -1,22 +1,49 @@
 import argparse
+import requests
+import json
+import ast
+import base64
+
 from util import extract_public_key, verify_artifact_signature
-from merkle_proof import DefaultHasher, verify_consistency, verify_inclusion
+from merkle_proof import DefaultHasher, verify_consistency, verify_inclusion, compute_leaf_hash
 
 def get_log_entry(log_index, debug=False):
     # verify that log index value is sane
-    pass
+    try:
+        response = requests.get(f'https://rekor.sigstore.dev/api/v1/log/entries?logIndex={log_index}')
+        data = response.json()
+        #print(data)
+        return data
+    except:
+        raise KeyError
+    
 
 def get_verification_proof(log_index, debug=False):
-    # verify that log index value is sane
-    pass
+    return False
 
 def inclusion(log_index, artifact_filepath, debug=False):
     # verify that log index and artifact filepath values are sane
-    # extract_public_key(certificate)
-    # verify_artifact_signature(signature, public_key, artifact_filepath)
-    # get_verification_proof(log_index)
-    # verify_inclusion(DefaultHasher, index, tree_size, leaf_hash, hashes, root_hash)
-    pass
+    entry = get_log_entry(log_index)
+    for i in entry:
+        code_string = base64.b64decode(entry[i]['body']).decode()
+        newstr = ast.literal_eval(code_string)
+        signature = newstr['spec']['signature']['content']
+        certificate = base64.b64decode(newstr['spec']['signature']['publicKey']['content'])
+        leaf_hash = compute_leaf_hash(entry[i]['body'])
+        tree_size = entry[i]['verification']['inclusionProof']['treeSize']
+        root_hash = entry[i]['verification']['inclusionProof']['rootHash']
+        #hash of every single value in the tree
+        hashes = entry[i]['verification']['inclusionProof']['hashes']
+        index = entry[i]['verification']['inclusionProof']['logIndex']
+
+    #extracts signature and public key
+    signature = base64.b64decode(signature)
+    public_key = extract_public_key(certificate)
+
+    #function calls for checking
+    verify_artifact_signature(signature, public_key, artifact_filepath)
+    get_verification_proof(log_index)
+    verify_inclusion(DefaultHasher, index, tree_size, leaf_hash, hashes, root_hash)
 
 def get_latest_checkpoint(debug=False):
     pass
@@ -27,6 +54,7 @@ def consistency(prev_checkpoint, debug=False):
     pass
 
 def main():
+    inclusion('129593524', 'artifact.md')
     debug = False
     parser = argparse.ArgumentParser(description="Rekor Verifier")
     parser.add_argument('-d', '--debug', help='Debug mode',
@@ -82,3 +110,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
