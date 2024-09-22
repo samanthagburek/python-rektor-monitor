@@ -19,16 +19,23 @@ def get_log_entry(log_index, debug=False):
     
 
 def get_verification_proof(log_index, debug=False):
+    if isinstance(log_index, int):
+        return True
     return False
 
 def inclusion(log_index, artifact_filepath, debug=False):
     # verify that log index and artifact filepath values are sane
     entry = get_log_entry(log_index)
     for i in entry:
+        #extract body and decode it
         code_string = base64.b64decode(entry[i]['body']).decode()
-        newstr = ast.literal_eval(code_string)
+        newstr = ast.literal_eval(code_string) 
+
+        #extract signature and certificate, decode again
         signature = newstr['spec']['signature']['content']
         certificate = base64.b64decode(newstr['spec']['signature']['publicKey']['content'])
+
+        #obtain info to verify merkle proof 
         leaf_hash = compute_leaf_hash(entry[i]['body'])
         tree_size = entry[i]['verification']['inclusionProof']['treeSize']
         root_hash = entry[i]['verification']['inclusionProof']['rootHash']
@@ -41,20 +48,54 @@ def inclusion(log_index, artifact_filepath, debug=False):
     public_key = extract_public_key(certificate)
 
     #function calls for checking
-    verify_artifact_signature(signature, public_key, artifact_filepath)
-    get_verification_proof(log_index)
-    verify_inclusion(DefaultHasher, index, tree_size, leaf_hash, hashes, root_hash)
+    if get_verification_proof(log_index): 
+        try:
+            verify_artifact_signature(signature, public_key, artifact_filepath)
+            verify_inclusion(DefaultHasher, index, tree_size, leaf_hash, hashes, root_hash)
+            print("Signature is valid.")
+            print("Offline root hash calculation for inclusion verified.")
+        except Exception as e:
+            print(e)
+    else:
+        print("Invalid log index")
 
+#fetches checkpoint from transparency log 
 def get_latest_checkpoint(debug=False):
-    pass
+    try:
+        response = requests.get(f'https://rekor.sigstore.dev/api/v1/log')
+        data = response.json()
+        print(data)
+        return data
+    except:
+        raise LookupError
 
 def consistency(prev_checkpoint, debug=False):
     # verify that prev checkpoint is not empty
-    # get_latest_checkpoint()
-    pass
+    if prev_checkpoint:
+        p_tree_id = prev_checkpoint["treeID"]
+        p_tree_size = prev_checkpoint["treeSize"]
+        p_root = prev_checkpoint["rootHash"]
+    else:
+        print("Previous checkpoint is empty")
+
+    data = get_latest_checkpoint()
+    c_tree_id = data['treeID']
+    c_tree_size = data['treeSize']
+    c_root = data['rootHash']
+
+    #get consistency proof from Rekor server
+    response = requests.get(f'https://rekor.sigstore.dev/api/v1/log/proof?firstSize={p_tree_size}&lastSize={c_tree_size}&treeID={c_tree_id}')
+    consistency_proof = response.json()
+    proof = consistency_proof['hashes']
+
+    #verify new checkpoint is consistent with old checkpoint
+    try:
+        verify_consistency(DefaultHasher, p_tree_size, c_tree_size, proof, p_root, c_root)
+        print("Consistency verification successful.")
+    except Exception as e:
+        print(e)
 
 def main():
-    inclusion('129593524', 'artifact.md')
     debug = False
     parser = argparse.ArgumentParser(description="Rekor Verifier")
     parser.add_argument('-d', '--debug', help='Debug mode',
