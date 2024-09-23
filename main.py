@@ -52,7 +52,6 @@ def inclusion(log_index, artifact_filepath, debug=False):
         try:
             verify_artifact_signature(signature, public_key, artifact_filepath)
             verify_inclusion(DefaultHasher, index, tree_size, leaf_hash, hashes, root_hash)
-            print("Signature is valid.")
             print("Offline root hash calculation for inclusion verified.")
         except Exception as e:
             print(e)
