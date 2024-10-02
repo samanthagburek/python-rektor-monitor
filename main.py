@@ -64,13 +64,6 @@ def get_latest_checkpoint(debug=False):
         url = f'https://rekor.sigstore.dev/api/v1/log'
         response = requests.get(url)
         data = response.json()
-        print(data)
-        if debug:
-            response = urllib.request.urlopen(url)
-            filedata = response.read().decode('UTF-8')
-            file = open("checkpoint.json", "w")
-            file.write(filedata)
-
         return data
     except:
         raise LookupError
@@ -134,7 +127,11 @@ def main():
         # get and print latest checkpoint from server
         # if debug is enabled, store it in a file checkpoint.json
         checkpoint = get_latest_checkpoint(debug)
-        print(json.dumps(checkpoint, indent=4))
+        json_object = json.dumps(checkpoint, indent=4)
+        print(json_object)
+        if debug:
+            with open("checkpoint.json", "w") as outfile:
+                outfile.write(json_object)
     if args.inclusion:
         inclusion(args.inclusion, args.artifact, debug)
     if args.consistency:
