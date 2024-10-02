@@ -1,6 +1,6 @@
 import argparse
 import requests
-import json
+import json, urllib.request
 import ast
 import base64
 
@@ -61,9 +61,16 @@ def inclusion(log_index, artifact_filepath, debug=False):
 #fetches checkpoint from transparency log 
 def get_latest_checkpoint(debug=False):
     try:
-        response = requests.get(f'https://rekor.sigstore.dev/api/v1/log')
+        url = f'https://rekor.sigstore.dev/api/v1/log'
+        response = requests.get(url)
         data = response.json()
         print(data)
+        if debug:
+            response = urllib.request.urlopen(url)
+            filedata = response.read().decode('UTF-8')
+            file = open("checkpoint.json", "w")
+            file.write(filedata)
+
         return data
     except:
         raise LookupError
