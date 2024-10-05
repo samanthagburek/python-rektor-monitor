@@ -1,6 +1,6 @@
 import argparse
 import requests
-import json, urllib.request
+import json
 import ast
 import base64
 
@@ -14,8 +14,8 @@ def get_log_entry(log_index, debug=False):
         data = response.json()
         #print(data)
         return data
-    except:
-        raise KeyError
+    except requests.exceptions.RequestException as e:
+        raise SystemExit(e)
     
 
 def get_verification_proof(log_index, debug=False):
@@ -61,17 +61,17 @@ def inclusion(log_index, artifact_filepath, debug=False):
 #fetches checkpoint from transparency log 
 def get_latest_checkpoint(debug=False):
     try:
-        url = f'https://rekor.sigstore.dev/api/v1/log'
+        url = 'https://rekor.sigstore.dev/api/v1/log'
         response = requests.get(url)
         data = response.json()
         return data
-    except:
-        raise LookupError
+    except requests.exceptions.RequestException as e:
+        raise SystemExit(e)
 
 def consistency(prev_checkpoint, debug=False):
     # verify that prev checkpoint is not empty
     if prev_checkpoint:
-        p_tree_id = prev_checkpoint["treeID"]
+        #p_tree_id = prev_checkpoint["treeID"]
         p_tree_size = prev_checkpoint["treeSize"]
         p_root = prev_checkpoint["rootHash"]
     else:
@@ -154,4 +154,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

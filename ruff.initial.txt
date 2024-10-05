@@ -1,0 +1,63 @@
+main.py:17:5: E722 Do not use bare `except`
+   |
+15 |         #print(data)
+16 |         return data
+17 |     except:
+   |     ^^^^^^ E722
+18 |         raise KeyError
+   |
+
+main.py:64:15: F541 [*] f-string without any placeholders
+   |
+62 | def get_latest_checkpoint(debug=False):
+63 |     try:
+64 |         url = f'https://rekor.sigstore.dev/api/v1/log'
+   |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ F541
+65 |         response = requests.get(url)
+66 |         data = response.json()
+   |
+   = help: Remove extraneous `f` prefix
+
+main.py:68:5: E722 Do not use bare `except`
+   |
+66 |         data = response.json()
+67 |         return data
+68 |     except:
+   |     ^^^^^^ E722
+69 |         raise LookupError
+   |
+
+main.py:74:9: F841 Local variable `p_tree_id` is assigned to but never used
+   |
+72 |     # verify that prev checkpoint is not empty
+73 |     if prev_checkpoint:
+74 |         p_tree_id = prev_checkpoint["treeID"]
+   |         ^^^^^^^^^ F841
+75 |         p_tree_size = prev_checkpoint["treeSize"]
+76 |         p_root = prev_checkpoint["rootHash"]
+   |
+   = help: Remove assignment to unused variable `p_tree_id`
+
+merkle_proof.py:25:29: E741 Ambiguous variable name: `l`
+   |
+23 |         return h.digest()
+24 | 
+25 |     def hash_children(self, l, r):
+   |                             ^ E741
+26 |         h = self.new()
+27 |         b = bytes([RFC6962_NODE_HASH_PREFIX]) + l + r
+   |
+
+util.py:58:32: F841 [*] Local variable `e` is assigned to but never used
+   |
+56 |         )
+57 |         print("Signature is valid")
+58 |     except InvalidSignature as e:
+   |                                ^ F841
+59 |         print("Signature is invalid")
+60 |     except Exception as e:
+   |
+   = help: Remove assignment to unused variable `e`
+
+Found 6 errors.
+[*] 2 fixable with the `--fix` option (1 hidden fix can be enabled with the `--unsafe-fixes` option).
