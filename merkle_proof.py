@@ -1,3 +1,4 @@
+'''functions to support Verify consistency between an older checkpoint and latest checkpoint'''
 import hashlib
 import binascii
 import base64
@@ -36,8 +37,6 @@ DefaultHasher = Hasher(hashlib.sha256)
 
 def verify_consistency(hasher, size1, size2, proof, root1, root2):
     # change format of args to be bytearray instead of hex strings
-    print("in verify consistency" + str(size1))
-    print(size2)
     root1 = bytes.fromhex(root1)
     root2 = bytes.fromhex(root2)
     bytearray_proof = []

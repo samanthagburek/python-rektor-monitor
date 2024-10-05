@@ -1,13 +1,15 @@
+'''Homework 1 Software Supply Chain Security'''
 import argparse
-import requests
 import json
 import ast
 import base64
+import requests
 
 from util import extract_public_key, verify_artifact_signature
 from merkle_proof import DefaultHasher, verify_consistency, verify_inclusion, compute_leaf_hash
 
-def get_log_entry(log_index, debug=False):
+def get_log_entry(log_index):
+    """fetches certificate info from rekor transparency log API when given log index"""
     # verify that log index value is sane
     try:
         response = requests.get(f'https://rekor.sigstore.dev/api/v1/log/entries?logIndex={log_index}')
@@ -15,27 +17,28 @@ def get_log_entry(log_index, debug=False):
         #print(data)
         return data
     except requests.exceptions.RequestException as e:
-        raise SystemExit(e)
-    
+        raise SystemExit(e) from e
 
-def get_verification_proof(log_index, debug=False):
+def get_verification_proof(log_index):
+    '''checks if log index is sane'''
     if isinstance(log_index, int):
         return True
     return False
 
-def inclusion(log_index, artifact_filepath, debug=False):
+def inclusion(log_index, artifact_filepath):
+    '''extracts signature and public key, uses it to verify signature and merkle proof'''
     # verify that log index and artifact filepath values are sane
     entry = get_log_entry(log_index)
     for i in entry:
         #extract body and decode it
         code_string = base64.b64decode(entry[i]['body']).decode()
-        newstr = ast.literal_eval(code_string) 
+        newstr = ast.literal_eval(code_string)
 
         #extract signature and certificate, decode again
         signature = newstr['spec']['signature']['content']
         certificate = base64.b64decode(newstr['spec']['signature']['publicKey']['content'])
 
-        #obtain info to verify merkle proof 
+        #obtain info to verify merkle proof
         leaf_hash = compute_leaf_hash(entry[i]['body'])
         tree_size = entry[i]['verification']['inclusionProof']['treeSize']
         root_hash = entry[i]['verification']['inclusionProof']['rootHash']
@@ -48,7 +51,7 @@ def inclusion(log_index, artifact_filepath, debug=False):
     public_key = extract_public_key(certificate)
 
     #function calls for checking
-    if get_verification_proof(log_index): 
+    if get_verification_proof(log_index):
         try:
             verify_artifact_signature(signature, public_key, artifact_filepath)
             verify_inclusion(DefaultHasher, index, tree_size, leaf_hash, hashes, root_hash)
@@ -58,24 +61,25 @@ def inclusion(log_index, artifact_filepath, debug=False):
     else:
         print("Invalid log index")
 
-#fetches checkpoint from transparency log 
-def get_latest_checkpoint(debug=False):
+def get_latest_checkpoint():
+    '''fetches checkpoint from transparency log'''
     try:
         url = 'https://rekor.sigstore.dev/api/v1/log'
         response = requests.get(url)
         data = response.json()
         return data
     except requests.exceptions.RequestException as e:
-        raise SystemExit(e)
+        raise SystemExit(e) from e
 
-def consistency(prev_checkpoint, debug=False):
+def consistency(prev_checkpoint):
+    '''verify consistency between an older and latest checkpoint'''
     # verify that prev checkpoint is not empty
     if prev_checkpoint:
         #p_tree_id = prev_checkpoint["treeID"]
         p_tree_size = prev_checkpoint["treeSize"]
         p_root = prev_checkpoint["rootHash"]
     else:
-        print("Previous checkpoint is empty")
+        raise ValueError("Previous checkpoint is empty")
 
     data = get_latest_checkpoint()
     c_tree_id = data['treeID']
@@ -95,6 +99,7 @@ def consistency(prev_checkpoint, debug=False):
         print(e)
 
 def main():
+    """parses through cli arguments and calls either to verify entry and signature inclusion or checkpoint consistency"""
     debug = False
     parser = argparse.ArgumentParser(description="Rekor Verifier")
     parser.add_argument('-d', '--debug', help='Debug mode',
@@ -126,14 +131,14 @@ def main():
     if args.checkpoint:
         # get and print latest checkpoint from server
         # if debug is enabled, store it in a file checkpoint.json
-        checkpoint = get_latest_checkpoint(debug)
+        checkpoint = get_latest_checkpoint()
         json_object = json.dumps(checkpoint, indent=4)
         print(json_object)
         if debug:
             with open("checkpoint.json", "w") as outfile:
                 outfile.write(json_object)
     if args.inclusion:
-        inclusion(args.inclusion, args.artifact, debug)
+        inclusion(args.inclusion, args.artifact)
     if args.consistency:
         if not args.tree_id:
             print("please specify tree id for prev checkpoint")
@@ -150,7 +155,7 @@ def main():
         prev_checkpoint["treeSize"] = args.tree_size
         prev_checkpoint["rootHash"] = args.root_hash
 
-        consistency(prev_checkpoint, debug)
+        consistency(prev_checkpoint)
 
 if __name__ == "__main__":
     main()

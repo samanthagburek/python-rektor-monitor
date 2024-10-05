@@ -1,3 +1,4 @@
+'''functions to support Verify entry inclusion and artifact signature present in transparency log'''
 from cryptography import x509
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization
@@ -7,9 +8,8 @@ from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.hazmat.primitives.serialization import load_pem_public_key
 from cryptography.exceptions import InvalidSignature
 
-
-# extracts and returns public key from a given cert (in pem format)
 def extract_public_key(cert):
+    '''extracts and returns public key from a given cert (in pem format)'''
 # read the certificate
 #    with open("cert.pem", "rb") as cert_file:
 #        cert_data = cert_file.read()
