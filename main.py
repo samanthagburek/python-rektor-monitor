@@ -17,8 +17,8 @@ def get_log_entry(log_index):
         data = response.json()
         #print(data)
         return data
-    except requests.exceptions.Timeout:
-        print("Timed out")
+    except requests.exceptions.Timeout as exc:
+        raise TimeoutError("Timed out") from exc
     except requests.exceptions.RequestException as e:
         raise SystemExit(e) from e
 
@@ -71,8 +71,8 @@ def get_latest_checkpoint():
         response = requests.get(url, timeout=10)
         data = response.json()
         return data
-    except requests.exceptions.Timeout:
-        print("Timed out")
+    except requests.exceptions.Timeout as exc:
+        raise TimeoutError("Timed out") from exc
     except requests.exceptions.RequestException as e:
         raise SystemExit(e) from e
 
@@ -97,8 +97,8 @@ def consistency(prev_checkpoint):
         response = requests.get(url, timeout=10)
         consistency_proof = response.json()
         proof = consistency_proof['hashes']
-    except requests.exceptions.Timeout:
-        print("Timed out")
+    except requests.exceptions.Timeout as exc:
+        raise TimeoutError("Timed out") from exc
 
     #verify new checkpoint is consistent with old checkpoint
     try:

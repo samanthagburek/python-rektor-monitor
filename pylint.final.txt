@@ -9,13 +9,12 @@ util.py:9:0: E0401: Unable to import 'cryptography.exceptions' (import-error)
 util.py:36:0: C0116: Missing function or method docstring (missing-function-docstring)
 util.py:60:11: W0718: Catching too general exception Exception (broad-exception-caught)
 ************* Module main
-main.py:15:0: C0301: Line too long (102/100) (line-too-long)
-main.py:90:0: C0301: Line too long (141/100) (line-too-long)
-main.py:102:0: C0301: Line too long (121/100) (line-too-long)
+main.py:96:0: C0301: Line too long (126/100) (line-too-long)
+main.py:111:0: C0301: Line too long (121/100) (line-too-long)
 main.py:6:0: E0401: Unable to import 'requests' (import-error)
-main.py:59:15: W0718: Catching too general exception Exception (broad-exception-caught)
-main.py:98:11: W0718: Catching too general exception Exception (broad-exception-caught)
-main.py:138:17: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+main.py:62:15: W0718: Catching too general exception Exception (broad-exception-caught)
+main.py:107:11: W0718: Catching too general exception Exception (broad-exception-caught)
+main.py:147:17: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
 ************* Module merkle_proof
 merkle_proof.py:55:0: C0301: Line too long (106/100) (line-too-long)
 merkle_proof.py:70:0: C0301: Line too long (109/100) (line-too-long)
@@ -44,5 +43,5 @@ merkle_proof.py:138:0: R0917: Too many positional arguments (7/5) (too-many-posi
 merkle_proof.py:151:0: C0116: Missing function or method docstring (missing-function-docstring)
 
 ------------------------------------------------------------------
-Your code has been rated at 7.04/10 (previous run: 6.92/10, +0.12)
+Your code has been rated at 7.19/10 (previous run: 7.11/10, +0.08)
 
