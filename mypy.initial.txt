@@ -1,0 +1,11 @@
+util.py:2: error: Cannot find implementation or library stub for module named "cryptography"  [import-not-found]
+util.py:3: error: Cannot find implementation or library stub for module named "cryptography.hazmat.backends"  [import-not-found]
+util.py:4: error: Cannot find implementation or library stub for module named "cryptography.hazmat.primitives"  [import-not-found]
+util.py:7: error: Cannot find implementation or library stub for module named "cryptography.hazmat.primitives.asymmetric"  [import-not-found]
+util.py:8: error: Cannot find implementation or library stub for module named "cryptography.hazmat.primitives.serialization"  [import-not-found]
+util.py:9: error: Cannot find implementation or library stub for module named "cryptography.exceptions"  [import-not-found]
+main.py:6: error: Library stubs not installed for "requests"  [import-untyped]
+main.py:6: note: Hint: "python3 -m pip install types-requests"
+main.py:6: note: (or run "mypy --install-types" to install all missing stub packages)
+main.py:6: note: See https://mypy.readthedocs.io/en/stable/running_mypy.html#missing-imports
+Found 7 errors in 2 files (checked 3 source files)
