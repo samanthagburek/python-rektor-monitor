@@ -1,0 +1,51 @@
+Run started:2024-10-06 00:59:25.899659
+
+Test results:
+>> Issue: [B113:request_without_timeout] Call to requests without timeout
+   Severity: Medium   Confidence: Low
+   CWE: CWE-400 (https://cwe.mitre.org/data/definitions/400.html)
+   More Info: https://bandit.readthedocs.io/en/1.7.10/plugins/b113_request_without_timeout.html
+   Location: ./main.py:15:19
+14	    try:
+15	        response = requests.get(f'https://rekor.sigstore.dev/api/v1/log/entries?logIndex={log_index}')
+16	        data = response.json()
+
+--------------------------------------------------
+>> Issue: [B113:request_without_timeout] Call to requests without timeout
+   Severity: Medium   Confidence: Low
+   CWE: CWE-400 (https://cwe.mitre.org/data/definitions/400.html)
+   More Info: https://bandit.readthedocs.io/en/1.7.10/plugins/b113_request_without_timeout.html
+   Location: ./main.py:68:19
+67	        url = 'https://rekor.sigstore.dev/api/v1/log'
+68	        response = requests.get(url)
+69	        data = response.json()
+
+--------------------------------------------------
+>> Issue: [B113:request_without_timeout] Call to requests without timeout
+   Severity: Medium   Confidence: Low
+   CWE: CWE-400 (https://cwe.mitre.org/data/definitions/400.html)
+   More Info: https://bandit.readthedocs.io/en/1.7.10/plugins/b113_request_without_timeout.html
+   Location: ./main.py:90:15
+89	    #get consistency proof from Rekor server
+90	    response = requests.get(f'https://rekor.sigstore.dev/api/v1/log/proof?firstSize={p_tree_size}&lastSize={c_tree_size}&treeID={c_tree_id}')
+91	    consistency_proof = response.json()
+
+--------------------------------------------------
+
+Code scanned:
+	Total lines of code: 282
+	Total lines skipped (#nosec): 0
+	Total potential issues skipped due to specifically being disabled (e.g., #nosec BXXX): 0
+
+Run metrics:
+	Total issues (by severity):
+		Undefined: 0
+		Low: 0
+		Medium: 3
+		High: 0
+	Total issues (by confidence):
+		Undefined: 0
+		Low: 3
+		Medium: 0
+		High: 0
+Files skipped (0):

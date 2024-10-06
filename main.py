@@ -12,10 +12,13 @@ def get_log_entry(log_index):
     """fetches certificate info from rekor transparency log API when given log index"""
     # verify that log index value is sane
     try:
-        response = requests.get(f'https://rekor.sigstore.dev/api/v1/log/entries?logIndex={log_index}')
+        url = f'https://rekor.sigstore.dev/api/v1/log/entries?logIndex={log_index}'
+        response = requests.get(url, timeout=10)
         data = response.json()
         #print(data)
         return data
+    except requests.exceptions.Timeout:
+        print("Timed out")
     except requests.exceptions.RequestException as e:
         raise SystemExit(e) from e
 
@@ -65,9 +68,11 @@ def get_latest_checkpoint():
     '''fetches checkpoint from transparency log'''
     try:
         url = 'https://rekor.sigstore.dev/api/v1/log'
-        response = requests.get(url)
+        response = requests.get(url, timeout=10)
         data = response.json()
         return data
+    except requests.exceptions.Timeout:
+        print("Timed out")
     except requests.exceptions.RequestException as e:
         raise SystemExit(e) from e
 
@@ -87,9 +92,13 @@ def consistency(prev_checkpoint):
     c_root = data['rootHash']
 
     #get consistency proof from Rekor server
-    response = requests.get(f'https://rekor.sigstore.dev/api/v1/log/proof?firstSize={p_tree_size}&lastSize={c_tree_size}&treeID={c_tree_id}')
-    consistency_proof = response.json()
-    proof = consistency_proof['hashes']
+    try:
+        url = f'https://rekor.sigstore.dev/api/v1/log/proof?firstSize={p_tree_size}&lastSize={c_tree_size}&treeID={c_tree_id}'
+        response = requests.get(url, timeout=10)
+        consistency_proof = response.json()
+        proof = consistency_proof['hashes']
+    except requests.exceptions.Timeout:
+        print("Timed out")
 
     #verify new checkpoint is consistent with old checkpoint
     try:
