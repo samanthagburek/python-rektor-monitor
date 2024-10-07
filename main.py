@@ -28,7 +28,7 @@ def get_verification_proof(log_index):
         return True
     return False
 
-def inclusion(log_index, artifact_filepath):
+def inclusion(log_index, artifact_filepath, debug):
     '''extracts signature and public key, uses it to verify signature and merkle proof'''
     # verify that log index and artifact filepath values are sane
     entry = get_log_entry(log_index)
@@ -57,7 +57,7 @@ def inclusion(log_index, artifact_filepath):
     if get_verification_proof(log_index):
         try:
             verify_artifact_signature(signature, public_key, artifact_filepath)
-            verify_inclusion(DefaultHasher, index, tree_size, leaf_hash, hashes, root_hash)
+            verify_inclusion(DefaultHasher, index, tree_size, leaf_hash, hashes, root_hash, debug)
             print("Offline root hash calculation for inclusion verified.")
         except Exception as e:
             print(e)
@@ -147,7 +147,7 @@ def main():
             with open("checkpoint.json", "w") as outfile:
                 outfile.write(json_object)
     if args.inclusion:
-        inclusion(args.inclusion, args.artifact)
+        inclusion(args.inclusion, args.artifact, debug)
     if args.consistency:
         if not args.tree_id:
             print("please specify tree id for prev checkpoint")

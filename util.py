@@ -34,6 +34,8 @@ def extract_public_key(cert):
     return pem_public_key
 
 def verify_artifact_signature(signature, public_key, artifact_filename):
+    '''calculates hash of artifact file, decrypts signature using
+    public key and compares hash values'''
     # load the public key
     # with open("cert_public.pem", "rb") as pub_key_file:
     #    public_key = load_pem_public_key(pub_key_file.read())
