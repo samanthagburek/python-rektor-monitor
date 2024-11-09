@@ -37,7 +37,7 @@ DefaultHasher = Hasher(hashlib.sha256)
 
 def verify_consistency(hasher, size1, size2, proof, root1, root2):
     # change format of args to be bytearray instead of hex strings
-    key_id = "ABSCJSKSNDNDKSKSM"
+    key_id = "ABSCJSKSNDNDKSbhjkhjkvhjvhjkKSM"
     root1 = bytes.fromhex(root1)
     root2 = bytes.fromhex(root2)
     bytearray_proof = []
