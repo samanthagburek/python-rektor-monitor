@@ -1,0 +1,4 @@
+git clone https://github.com/samanthagburek/python-rektor-monitor.git
+git-filter-repo --path personal.txt --invert-paths
+git remote add origin git@github.com:samanthagburek/python-rektor-monitor.git
+git push --set-upstream origin main --force
