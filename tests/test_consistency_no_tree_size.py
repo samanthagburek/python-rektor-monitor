@@ -4,11 +4,11 @@ from jsonschema import validate
 import subprocess
 import requests
 
-def test_consistency_no_tree_id():
-    no_tree_output = "please specify tree id for prev checkpoint\n"
+def test_consistency_no_tree_size():
+    no_tree_output = "please specify tree size for prev checkpoint\n"
 
     consistency = subprocess.run(
-        ['python3', 'main.py', '--consistency'],
+        ['python3', 'main.py', '--consistency', '--tree-id', '344567'],
         capture_output=True,
         text=True
     )
@@ -18,4 +18,4 @@ def test_consistency_no_tree_id():
 
 
 if __name__ == "__main__":
-    test_consistency_no_tree_id()
+    test_consistency_no_tree_size()
