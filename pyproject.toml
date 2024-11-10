@@ -1,8 +1,9 @@
 [tool.poetry]
-name = "poetry-demo"
+name = "python-rektor-monitor"
 version = "0.1.0"
 description = ""
 authors = ["samanthagburek <sgg2056@nyu.edu>"]
+license = "MIT"
 readme = "README.md"
 
 [tool.poetry.dependencies]
