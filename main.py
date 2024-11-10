@@ -58,7 +58,7 @@ def inclusion(log_index, artifact_filepath, debug):
         try:
             verify_artifact_signature(signature, public_key, artifact_filepath)
             verify_inclusion(DefaultHasher, index, tree_size, leaf_hash, hashes, root_hash, debug)
-            print("Offline root hash calculation for inclusion verified.")
+            print("Offline root hash calculation for inclusion verified.", end='')
         except Exception as e:
             print(e)
     else:
@@ -147,6 +147,9 @@ def main():
             with open("checkpoint.json", "w") as outfile:
                 outfile.write(json_object)
     if args.inclusion:
+        if not args.artifact:
+            print("Please include artifact file")
+            return
         inclusion(args.inclusion, args.artifact, debug)
     if args.consistency:
         if not args.tree_id:
