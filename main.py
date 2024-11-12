@@ -60,7 +60,7 @@ def inclusion(log_index, artifact_filepath, debug):
             verify_inclusion(DefaultHasher, index, tree_size, leaf_hash, hashes, root_hash, debug)
             print("Offline root hash calculation for inclusion verified.", end='')
         except Exception as e:
-            print(e)
+            raise(e)
     else:
         print("Invalid log index")
 
@@ -105,7 +105,7 @@ def consistency(prev_checkpoint):
         verify_consistency(DefaultHasher, p_tree_size, c_tree_size, proof, p_root, c_root)
         print("Consistency verification successful.")
     except Exception as e:
-        print(e)
+        raise(e)
 
 def main():
     """parses through cli arguments and calls either to verify entry and signature inclusion or checkpoint consistency"""
