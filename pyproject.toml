@@ -5,9 +5,12 @@ description = ""
 authors = ["samanthagburek <sgg2056@nyu.edu>"]
 license = "MIT"
 readme = "README.md"
+packages = [{include = "python_rekor_monitor"}]
 
 [tool.poetry.dependencies]
 python = "^3.12"
+requests = "^2.32.3"
+cryptography = "^44.0.0"
 
 [tool.poetry.group.test.dependencies]
 mypy = "^1.13.0"
@@ -21,3 +24,6 @@ bandit = "^1.7.10"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+rekor-monitor = "python_rekor_monitor.main:main"
