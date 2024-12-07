@@ -26,3 +26,23 @@ More info on signing blobs is here: https://docs.sigstore.dev/cosign/signing/sig
   ```
 
 
+Notes:
+Hw 4
+Install all dependencies and build poetry with 
+```bash
+    poetry add ($cat requirements.txt)
+    poetry build
+  ```
+Test with 
+```bash
+    pip install dist/python_rektor_monitor-0.1.0-py3-none-any.whl
+    rekor-monitor -c
+  ```
+SBOM Attestation  
+- need to verify the type of predicate given
+- using OIDC as a key is the default if no key argument given
+```bash
+    cosign attest-blob dist/python_rektor_monitor-0.1.0-py3-none-any.whl --predicate cyclonedx-sbom.json --type cyclonedx --bundle sbom.bundle
+    cosign verify-blob-attestation --bundle sbom.bundle dist/python_rektor_monitor-0.1.0-py3-none-any.whl --certificate-identity samanthagburek --certificate-oidc-issuer https://github.com --type cyclonedx --check-claims
+  ```
+
