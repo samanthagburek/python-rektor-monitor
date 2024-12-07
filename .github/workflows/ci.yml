@@ -52,7 +52,6 @@ jobs:
       - name: Run tests
         run: |
           source .venv/bin/activate
-          coverage report
           flake8 .
           black . --check
           ruff check --output-format=github .
