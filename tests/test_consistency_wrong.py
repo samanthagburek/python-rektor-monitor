@@ -1,9 +1,8 @@
 import sys
 import os
 import pytest
-import subprocess
-from merkle_proof import RootMismatchError
-from main import main
+from python_rekor_monitor.main import main
+from python_rekor_monitor.merkle_proof import RootMismatchError
 from unittest import mock
 
 

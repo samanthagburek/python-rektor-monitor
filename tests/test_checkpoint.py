@@ -1,4 +1,3 @@
-import sys
 import json
 from jsonschema import validate
 import subprocess

@@ -1,8 +1,5 @@
-import sys
 import json
-from jsonschema import validate
 import subprocess
-import requests
 
 def test_consistency():
     correct_consistency = "Consistency verification successful.\n"

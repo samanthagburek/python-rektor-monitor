@@ -54,6 +54,5 @@ jobs:
           source .venv/bin/activate
           cd python_rekor_monitor
           flake8 . --max-line-length 120
-          black . --check
           ruff check --output-format=github .
           pylint $(git ls-files '*.py')

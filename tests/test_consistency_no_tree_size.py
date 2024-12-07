@@ -1,8 +1,4 @@
-import sys
-import json
-from jsonschema import validate
 import subprocess
-import requests
 
 def test_consistency_no_tree_size():
     no_tree_output = "please specify tree size for prev checkpoint\n"
