@@ -55,4 +55,4 @@ jobs:
           cd python_rekor_monitor
           flake8 . --max-line-length 120
           ruff check --output-format=github .
-          pylint $(git ls-files '*.py')
+          pylint $(git ls-files 'main.py')

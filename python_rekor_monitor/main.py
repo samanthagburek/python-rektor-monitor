@@ -6,8 +6,8 @@ import base64
 import requests
 
 from python_rekor_monitor.util import extract_public_key, verify_artifact_signature
-from python_rekor_monitor.merkle_proof import DefaultHasher, verify_consistency, verify_inclusion, compute_leaf_hash
-
+from python_rekor_monitor.merkle_proof import DefaultHasher, verify_consistency
+from python_rekor_monitor.merkle_proof import verify_inclusion, compute_leaf_hash
 
 def get_log_entry(log_index):
     """fetches certificate info from rekor transparency log API when given log index"""
@@ -37,8 +37,7 @@ def inclusion(log_index, artifact_filepath, debug):
     entry = get_log_entry(log_index)
     for i in entry:
         # extract body and decode it
-        code_string = base64.b64decode(entry[i]['body']).decode()
-        newstr = ast.literal_eval(code_string)
+        newstr = ast.literal_eval(base64.b64decode(entry[i]['body']).decode())
 
         # extract signature and certificate, decode again
         signature = newstr['spec']['signature']['content']
@@ -63,7 +62,7 @@ def inclusion(log_index, artifact_filepath, debug):
             verify_inclusion(DefaultHasher, index, tree_size, leaf_hash, hashes, root_hash, debug)
             print("Offline root hash calculation for inclusion verified.", end='')
         except Exception as e:
-            raise (e)
+            raise e
     else:
         print("Invalid log index")
 
@@ -97,8 +96,9 @@ def consistency(prev_checkpoint):
     c_root = data['rootHash']
 
     # get consistency proof from Rekor server
+    # pylint: disable=line-too-long
     try:
-        url = f'https://rekor.sigstore.dev/api/v1/log/proof?firstSize={pt_size}&lastSize={ct_size}&treeID={ct_id}'
+        url = f'https://rekor.sigstore.dev/api/v1/log/proof?firstSize={pt_size}&lastSize={ct_size}&treeID={ct_id}' # noqa
         response = requests.get(url, timeout=10)
         consistency_proof = response.json()
         proof = consistency_proof['hashes']
@@ -110,7 +110,7 @@ def consistency(prev_checkpoint):
         verify_consistency(DefaultHasher, pt_size, ct_size, proof, p_root, c_root)
         print("Consistency verification successful.")
     except Exception as e:
-        raise (e)
+        raise e
 
 
 def main():
@@ -151,7 +151,7 @@ def main():
         json_object = json.dumps(checkpoint, indent=4)
         print(json_object)
         if debug:
-            with open("checkpoint.json", "w") as outfile:
+            with open("checkpoint.json", "w", encoding="utf-8") as outfile:
                 outfile.write(json_object)
     if args.inclusion:
         if not args.artifact:
