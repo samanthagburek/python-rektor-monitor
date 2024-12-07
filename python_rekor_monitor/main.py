@@ -9,6 +9,7 @@ from python_rekor_monitor.util import extract_public_key, verify_artifact_signat
 from python_rekor_monitor.merkle_proof import DefaultHasher, verify_consistency
 from python_rekor_monitor.merkle_proof import verify_inclusion, compute_leaf_hash
 
+
 def get_log_entry(log_index):
     """fetches certificate info from rekor transparency log API when given log index"""
     # verify that log index value is sane
