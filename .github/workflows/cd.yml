@@ -58,7 +58,6 @@ jobs:
       - name: Build project
         env:
           PUB_TOKEN: ${{ secrets.PYPI_TOKEN }}
-        run: poetry config pypi-token.pypi "$PUB_TOKEN"
-        
-      - name: Build project
-        run: poetry publish --build
+        run: |
+            poetry config pypi-token.pypi "$PUB_TOKEN"
+            poetry publish
