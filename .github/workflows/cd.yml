@@ -1,32 +1,19 @@
-name: continuous integration
-on: push
+name: Continuous Deployment
+on:
+  push:
+    tags:
+      - '*'
 
 jobs:
-  ci:
+  cd:
     runs-on: ubuntu-latest
     steps:
-      #----------------------------------------------
-      #       check-out repo and set-up python
-      #----------------------------------------------
-      - name: Check out repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: '2'  #check only latest two commits for comparison
+      - name: Check out code
+        uses: actions/checkout@v2
 
-      - name: TruffleHog OSS
-        id: trufflehog
-        uses: trufflesecurity/trufflehog@main
-        continue-on-error: true
-        with:
-          path: ./
-          base: "${{ github.sha }}^"  # Previous commit
-          head: HEAD
-          extra_args: --debug
-  
-      - name: Scan Results Status
-        if: steps.trufflehog.outcome == 'failure'
-        run: exit 1
-
+    #----------------------------------------------
+    #  -----  install python  -----
+    #----------------------------------------------
       - name: Set up python
         id: setup-python
         uses: actions/setup-python@v5
@@ -64,16 +51,11 @@ jobs:
       #----------------------------------------------
       - name: Install project
         run: poetry install --no-interaction
-      #----------------------------------------------
-      #              run test suite
-      #----------------------------------------------
-      - name: Run tests
+
+      - name: Install project
+        env:
+          PUB_TOKEN: ${{ secrets.PYPI_TOKEN }}
         run: |
-          source .venv/bin/activate
-          cd python_rekor_monitor
-          flake8 . --max-line-length 120
-          ruff check --output-format=github .
-          pylint $(git ls-files 'main.py')
-          bandit *.py -n 3 -lll
-          cd ../
-          pytest --cov=. tests/
+            poetry build
+            poetry config pypi-token.pypi "$PUB_TOKEN"
+            poetry publish --build
