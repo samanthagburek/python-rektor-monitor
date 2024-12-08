@@ -57,6 +57,6 @@ jobs:
           PUB_TOKEN: ${{ secrets.PYPI_TOKEN }}
         run: |
             echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
-            poetry version "$VERSION"
-            poetry config pypi-token.pypi "$PUB_TOKEN"
+            poetry version $VERSION
+            poetry config pypi-token.pypi $PUB_TOKEN
             poetry publish --build
