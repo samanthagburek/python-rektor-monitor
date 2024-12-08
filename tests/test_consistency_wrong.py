@@ -1,12 +1,10 @@
 import sys
 import os
 import pytest
+sys.path.append('..')
 from python_rekor_monitor.main import main
 from python_rekor_monitor.merkle_proof import RootMismatchError
 from unittest import mock
-
-
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 def test_artifact_wrong(mocker):
     mocker.patch("sys.argv",['main.py', '--consistency', '--tree-id', "119305095991665606", '--tree-size', '26302632', 

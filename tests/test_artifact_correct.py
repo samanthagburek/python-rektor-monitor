@@ -1,12 +1,16 @@
 import subprocess
+import os
 
 def test_artifact_correct():
     validsignature = "Signature is valid"
     validinclusion = "Offline root hash calculation for inclusion verified."
+    root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../python_rekor_monitor'))
+    print(root_dir)
     result = subprocess.run(
-        ['python3', 'main.py', '--inclusion', "129593524", "--artifact", "artifact.md"],
+        ['python3', 'main.py', '--inclusion', "129593524", "--artifact", "../artifact.md"],
         capture_output=True,
-        text=True
+        text=True,
+        cwd=root_dir
     )
     output = result.stdout.split('\n')
     signatureoutput = output[0]

@@ -1,12 +1,15 @@
 import json
+import os
 import subprocess
 
 def test_consistency():
+    root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../python_rekor_monitor'))
     correct_consistency = "Consistency verification successful.\n"
     checkpoint = subprocess.run(
         ['python3', 'main.py', '-c'],
         capture_output=True,
-        text=True
+        text=True,
+        cwd = root_dir
     )
     output = checkpoint.stdout
     data = json.loads(output)
@@ -18,7 +21,8 @@ def test_consistency():
         ['python3', 'main.py', '--consistency', '--tree-id', treeID, '--tree-size', treeSize, 
          '--root-hash', rootHash],
         capture_output=True,
-        text=True
+        text=True,
+        cwd = root_dir
     )
     consistency_output = consistency.stdout
 

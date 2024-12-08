@@ -1,6 +1,7 @@
 import json
-from jsonschema import validate
+import jsonschema
 import subprocess
+import os 
 
 checkpoint_schema = {
     "type": "object",
@@ -15,15 +16,17 @@ checkpoint_schema = {
 }
 
 def test_checkpoint():
+    root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../python_rekor_monitor'))
     result = subprocess.run(
         ['python3', 'main.py', '-c'],
         capture_output=True,
-        text=True
+        text=True,
+        cwd = root_dir
     )
     output = result.stdout
     data = json.loads(output)
 
-    validate(instance=data, schema=checkpoint_schema)
+    jsonschema.validate(instance=data, schema=checkpoint_schema)
 
 if __name__ == "__main__":
     test_checkpoint()

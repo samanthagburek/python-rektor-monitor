@@ -1,13 +1,16 @@
 '''Homework 1 Software Supply Chain Security'''
+import sys
 import argparse
 import json
 import ast
 import base64
 import requests
-
-from python_rekor_monitor.util import extract_public_key, verify_artifact_signature
-from python_rekor_monitor.merkle_proof import DefaultHasher, verify_consistency
-from python_rekor_monitor.merkle_proof import verify_inclusion, compute_leaf_hash
+sys.path.append('..')
+# pylint: disable=wrong-import-position
+from python_rekor_monitor.util import extract_public_key, verify_artifact_signature  # noqa: E402
+from python_rekor_monitor.merkle_proof import DefaultHasher, verify_consistency  # noqa: E402
+from python_rekor_monitor.merkle_proof import verify_inclusion, compute_leaf_hash  # noqa: E402
+# pylint: enable=wrong-import-position
 
 
 def get_log_entry(log_index):

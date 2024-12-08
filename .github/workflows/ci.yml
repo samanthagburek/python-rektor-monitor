@@ -56,3 +56,6 @@ jobs:
           flake8 . --max-line-length 120
           ruff check --output-format=github .
           pylint $(git ls-files 'main.py')
+          bandit *.py -n 3 -lll
+          cd ../
+          pytest --cov=. tests/
