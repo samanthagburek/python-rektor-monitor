@@ -52,10 +52,13 @@ jobs:
       - name: Install project
         run: poetry install --no-interaction
 
-      - name: Install project
+      - name: Build project
+        run: poetry build
+
+      - name: Build project
         env:
           PUB_TOKEN: ${{ secrets.PYPI_TOKEN }}
-        run: |
-            poetry build
-            poetry config pypi-token.pypi "$PUB_TOKEN"
-            poetry publish --build
+        run: poetry config pypi-token.pypi "$PUB_TOKEN"
+        
+      - name: Build project
+        run: poetry publish --build
