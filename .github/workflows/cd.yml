@@ -9,6 +9,8 @@ jobs:
     permissions:
         id-token: write
         attestations: write
+        contents: write
+        discussions: write
     steps:
       - name: Check out code
         uses: actions/checkout@v2
