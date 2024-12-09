@@ -1,6 +1,6 @@
 # Python Rekor Monitor Template
 ![Release](https://github.com/github/docs/actions/workflows/ci.yml/badge.svg)
-[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/samanthagburek/python-rektor-monitor/badge)](https://scorecard.dev/viewer/?uri=github.com/samanthagburek/python-rektor-monitor)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/samanthagburek/python-rektor-monitor/badge)](https://scorecard.dev/viewer/?uri=github.com/{owner}/{repo})
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/9783/badge)](https://www.bestpractices.dev/projects/9783)
 ## Prerequisite:
 - Install cosign: https://docs.sigstore.dev/cosign/system_config/installation/
