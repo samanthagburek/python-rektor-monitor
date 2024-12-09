@@ -64,5 +64,5 @@ jobs:
       - name: Attest
         uses: actions/attest-sbom@v2
         with:
-            subject-path: '${{ github.workspace }}/python-rektor-monitor'
+            subject-path: '${{ github.workspace }}'
             sbom-path: 'cyclonedx-sbom.json'
