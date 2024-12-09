@@ -16,7 +16,7 @@ on:
 
 # Declare default permissions as read only.
 permissions:
-        id-token: write
+  id-token: write
 
 
 jobs:
