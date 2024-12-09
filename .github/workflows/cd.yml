@@ -56,10 +56,8 @@ jobs:
       - name: Build project
         run: |
             echo "Tag name from github.ref_name: ${{  github.ref_name }}"
-            poetry version ${{  github.ref_name }}"
+            poetry version ${{  github.ref_name }}
             poetry build
-            echo "::set-output name=tag::${}"
-            echo "::set-output name=version::$(poetry version --short)"
 
       - name: Generate SBOM
         uses: anchore/sbom-action@v0
