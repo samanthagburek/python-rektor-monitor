@@ -1,8 +1,6 @@
 name: Continuous Deployment
 on:
   push:
-    tags:
-      - '*'
 jobs:
   cd:
     runs-on: ubuntu-latest
