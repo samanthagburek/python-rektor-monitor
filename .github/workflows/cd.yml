@@ -76,7 +76,7 @@ jobs:
         run: |
             VERSION=$(poetry version --short)
             echo "VERSION=${VERSION}" >> $GITHUB_ENV
-            gh release create ${{env.VERSION}} ./dist/* ./dist/*.whl
+            gh release create ${{env.VERSION}} ./dist/*
             --repo="$GITHUB_REPOSITORY" \
             --title="${{env.VERSION}}" \
             --generate-notes
