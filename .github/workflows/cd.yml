@@ -3,10 +3,12 @@ on:
   push:
     tags:
       - '*'
-
 jobs:
   cd:
     runs-on: ubuntu-latest
+    permissions:
+        id-token: write
+        attestations: write
     steps:
       - name: Check out code
         uses: actions/checkout@v2
@@ -53,10 +55,17 @@ jobs:
         run: poetry install --no-interaction
 
       - name: Build project
-        env:
-          PUB_TOKEN: ${{ secrets.PYPI_TOKEN }}
         run: |
             echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
-            poetry version $VERSION
-            poetry config pypi-token.pypi $PUB_TOKEN
-            poetry publish --build
+            poetry build
+
+      - name: Generate SBOM
+        uses: anchore/sbom-action@v0
+        with:
+            format: 'cyclonedx-json'
+            output-file: 'sbom.cyclonedx.json'
+      - name: Attest
+        uses: actions/attest-sbom@v2
+        with:
+            subject-path: '${{ github.workspace }}/python-rektor-monitor'
+            sbom-path: 'cyclonedx-sbom.json'
