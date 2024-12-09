@@ -1,5 +1,5 @@
 # Python Rekor Monitor Template
-![Release][(https://github.com/samanthagburek/python-rektor-monitor/actions/workflows/ci.yml/badge.svg)](https://github.com/123R3N321/hmk1/actions/workflows/ci.yml)
+![Release][(https://github.com/samanthagburek/python-rektor-monitor/actions/workflows/ci.yml/badge.svg)](https://github.com/samanthagburek/python-rektor-monitor/actions/workflows/ci.yml)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/samanthagburek/python-rektor-monitor/badge)](https://scorecard.dev/viewer/?uri=github.com/{owner}/{repo})
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/9783/badge)](https://www.bestpractices.dev/projects/9783)
 ## Prerequisite:
