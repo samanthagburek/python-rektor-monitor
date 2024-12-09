@@ -58,6 +58,8 @@ jobs:
             echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
             poetry version $GITHUB_ENV
             poetry build
+            VERSION=$(poetry version --short)
+            echo "VERSION=${VERSION}" >> $GITHUB_ENV
 
       - name: Generate SBOM
         uses: anchore/sbom-action@v0
@@ -69,14 +71,15 @@ jobs:
         with:
             subject-path: '${{ github.workspace }}/python_rekor_monitor'
             sbom-path: 'cyclonedx-sbom.json'
-      - name: Create Release
+
+
+      - name: GitHub Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            dist/*
+          tag_name: ${{ env.VERSION }}
+          name: "python-rektor-monitor ${{ env.VERSION }}"
         env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            tag: ${{ github.ref_name }}
-        run: |
-            VERSION=$(poetry version --short)
-            echo "VERSION=${VERSION}" >> $GITHUB_ENV
-            gh release create ${{env.VERSION}} ./dist/*
-            --repo="$GITHUB_REPOSITORY" \
-            --title="${{env.VERSION}}" \
-            --generate-notes
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
