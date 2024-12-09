@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "python-rektor-monitor"
-version = "0.1.1"
+version = "0.1.2"
 description = ""
 authors = ["samanthagburek <sgg2056@nyu.edu>"]
 license = "MIT"
