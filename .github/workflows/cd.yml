@@ -64,5 +64,5 @@ jobs:
       - name: Attest
         uses: actions/attest-sbom@v2
         with:
-            subject-path: '${{ github.workspace }}'
+            subject-path: '${{ github.workspace }}/python_rekor_monitor'
             sbom-path: 'cyclonedx-sbom.json'
