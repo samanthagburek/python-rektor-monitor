@@ -2,7 +2,7 @@ name: Continuous Deployment
 on: 
     push:
         tags:
-            '*'
+            - '*'
 jobs:
   cd:
     runs-on: ubuntu-latest
@@ -75,7 +75,7 @@ jobs:
         run: |
             VERSION=$(poetry version --short)
             echo "VERSION=${VERSION}" >> $GITHUB_ENV
-            gh release create ${{env.VERSION}} ./dist/*.tgz ./dist/*.whl
+            gh release create ${{env.VERSION}} ./dist/*.tar.gz ./dist/*.whl
             --repo="$GITHUB_REPOSITORY" \
             --title="${{env.VERSION}}" \
             --generate-notes
