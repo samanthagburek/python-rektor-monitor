@@ -1,6 +1,5 @@
 name: Continuous Deployment
-on:
-  push:
+on: push
 jobs:
   cd:
     runs-on: ubuntu-latest
