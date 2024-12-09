@@ -56,6 +56,7 @@ jobs:
       - name: Build project
         run: |
             echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+            poetry version $GITHUB_ENV
             poetry build
 
       - name: Generate SBOM
@@ -75,7 +76,7 @@ jobs:
         run: |
             VERSION=$(poetry version --short)
             echo "VERSION=${VERSION}" >> $GITHUB_ENV
-            gh release create ${{env.VERSION}} ./dist/*.tar.gz ./dist/*.whl
+            gh release create ${{env.VERSION}} ./dist/* ./dist/*.whl
             --repo="$GITHUB_REPOSITORY" \
             --title="${{env.VERSION}}" \
             --generate-notes
