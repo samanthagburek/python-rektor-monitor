@@ -1,5 +1,8 @@
 name: Continuous Deployment
-on: push
+on: 
+    push:
+        tags:
+            '*'
 jobs:
   cd:
     runs-on: ubuntu-latest
@@ -9,7 +12,6 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v2
-
     #----------------------------------------------
     #  -----  install python  -----
     #----------------------------------------------
@@ -66,3 +68,14 @@ jobs:
         with:
             subject-path: '${{ github.workspace }}/python_rekor_monitor'
             sbom-path: 'cyclonedx-sbom.json'
+      - name: Create Release
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            tag: ${{ github.ref_name }}
+        run: |
+            VERSION=$(poetry version --short)
+            echo "VERSION=${VERSION}" >> $GITHUB_ENV
+            gh release create ${{env.VERSION}} ./dist/*.tgz ./dist/*.whl
+            --repo="$GITHUB_REPOSITORY" \
+            --title="${{env.VERSION}}" \
+            --generate-notes
